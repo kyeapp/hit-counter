@@ -1,7 +1,12 @@
-package main 
+/* 
+ * With a setup like this it doesn't account for the race conditions of the hit counter 
+ * being accessed too fast.
+ */
+
+package main
 
 import (
-	//"fmt"
+//"fmt"
 )
 
 type Counter struct {
@@ -21,5 +26,5 @@ func (c *Counter) Reset_count() {
 }
 
 func main() {
-	
+
 }

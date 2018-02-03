@@ -3,13 +3,21 @@ package main
 import (
 	"sync"
 	"testing"
+	"time"
+	"log"
 )
 
-func run_hit_test(t *testing.T, c *Counter, max int) {
-	var wg sync.WaitGroup
-	wg.Add(max)
+func timeTrack(start time.Time, name string) {
+    elapsed := time.Since(start)
+    log.Printf("%s took %s", name, elapsed)
+}
 
-	for i := 0; i < max; i++ {
+func run_hit_test(t *testing.T, c *Counter, max uint64) {
+	defer timeTrack(time.Now(), "test")
+	var wg sync.WaitGroup
+	wg.Add(int(max))
+
+	for i := uint64(0); i < max; i++ {
 		go func() {
 			defer wg.Done()
 			c.Add_count()
@@ -31,7 +39,7 @@ func run_hit_test(t *testing.T, c *Counter, max int) {
 func TestHit(t *testing.T) {
 	testCounter := new(Counter)
 
-	test_hit := []int{10, 100, 1000, 10000, 100000, 1000000, 10000000}
+	test_hit := []uint64{10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000}
 
 	for _, i := range test_hit {
 		run_hit_test(t, testCounter, i)
